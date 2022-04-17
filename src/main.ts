@@ -95,10 +95,8 @@ app.get("/user", asynchHandler(async (req, res) => {
         res.status(404).send("User not found");
         return;
     }
-    res.send({
-        id: user.id,
-        name: user.name
-    });
+    const userObj: User = { name: user.name, id: user.id };
+    res.send(userObj);
 }));
 
 // TODO: make this actually work
