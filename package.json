@@ -1,0 +1,21 @@
+{
+  "name": "yacc",
+  "version": "1.0.0",
+  "description": "Just me trying to figure out how to create a fullstack chat application",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc && node dist/main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.26.1",
+    "express": "^4.17.3",
+    "express-async-handler": "^1.2.0",
+    "mongodb": "^4.5.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13"
+  }
+}
