@@ -1,13 +1,14 @@
 {
     "compilerOptions": {
         "target": "ESNext",
-        "module": "commonjs",
+        "module": "ESNext",
         "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "rootDir": "./src",
         "outDir": "./dist",
+        "moduleResolution": "node",
         "resolveJsonModule": true
     },
     "$schema": "https://json.schemastore.org/tsconfig",
