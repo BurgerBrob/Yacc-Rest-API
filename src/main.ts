@@ -2,6 +2,7 @@ import fs from 'fs';
 import express from 'express';
 import { Collection, Db, MongoClient } from "mongodb";
 import asynchHandler from "express-async-handler"
+import bodyParser from 'body-parser';
 
 // Checks if config file exists
 if (!fs.existsSync('./dist/config.json')) {
@@ -17,6 +18,7 @@ if (username === "" || password === "") {
 }
 
 const app = express()
+app.use(bodyParser.urlencoded({ extended: true }));
 const port = 3000
 
 // Sets up the database connection
@@ -26,6 +28,8 @@ const dbName = "Yacc";
 let db: Db;
 let users: Collection;
 let tokens: Collection;
+
+const tokenForm = /^[0-9a-f]{32}$/;
 
 // Connects to the database
 app.listen(port, async () => {
@@ -42,6 +46,18 @@ interface User {
 }
 
 interface Users extends Array<User> { }
+
+interface Permission {
+    getUser: boolean;
+    createUser: boolean;
+    addToken: boolean;
+}
+
+interface Token {
+    name: string;
+    permission: Permission;
+    apiToken: string;
+}
 
 
 //Gets list of Users
@@ -100,33 +116,57 @@ app.get("/user", asynchHandler(async (req, res) => {
 }));
 
 // TODO: make this actually work
-// app.post("/token", asynchHandler(async (req, res) => {
-//     const body = req.body();
-//     console.log(body);
-//     const token = req.query.apiToken || "";
-//     if (token == "") {
-//         res.status(401).send("Unauthorized");
-//         return;
-//     }
-//     const getUser = req.query.getUser || false;
-//     const createUser = req.query.createUser || false;
-//     const name = req.query.name || "";
-//     if (name == "") {
-//         res.status(400).send("Bad Request");
-//         return;
-//     }
-//     await tokens.insertOne({
-//         apiToken: token,
-//         permissions: {
-//             getUser: getUser,
-//             createUser: createUser
-//         },
-//         name: name
-//     });
-// }));
+app.post("/token", asynchHandler(async (req, res) => {
+    // console.log('Got body:', req.body);
+    const token = req.body.apiToken;
+
+    if (!token) {
+        res.statusMessage = "No apiToken provided";
+        res.status(400).end();
+        return;
+    }
+    // Check if the token is a valid token with length 32 and only contains hexadecimal characters
+    if (!tokenForm.test(token)) {
+        res.sendStatus(400);
+        return;
+    }
+    const permission = (await tokens.findOne({ apiToken: token }));
+    if (!permission || !permission.permissions.addToken) {
+        res.sendStatus(401);
+        return;
+    }
+    const newToken = req.body.newToken;
+    //Check if newToken fits the form
+    if (!tokenForm.test(newToken) || !newToken) {
+        res.sendStatus(400);
+        return;
+    }
+    //Check if newToken is already in use
+    const tokenExists = await tokens.findOne({ apiToken: newToken });
+    if (tokenExists) {
+        res.sendStatus(400);
+        return;
+    }
+    const newName = req.body.newName;
+    if (!newName) {
+        res.sendStatus(400);
+        return;
+    }
+    const newPermission: Permission = {
+        getUser: req.body.getUser == "true" || req.body.admin == "true",
+        createUser: req.body.createUser == "true" || req.body.admin == "true",
+        addToken: req.body.addToken == "true" || req.body.admin == "true"
+    }
+    const newEntry: Token = {
+        name: newName,
+        permission: newPermission,
+        apiToken: newToken
+    }
+    tokens.insertOne(newEntry);
+    res.sendStatus(200);
+}));
 
 // Close the connection when the application ends
 process.on("exit", () => {
     client.close()
-    console.log("test");
 });
