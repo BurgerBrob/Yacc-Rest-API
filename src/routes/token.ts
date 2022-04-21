@@ -23,7 +23,6 @@ interface Token {
     apiToken: string;
 }
 
-// TODO: make this actually work
 router.post("/token", asynchHandler(async (req, res) => {
     const token = req.body.apiToken;
     if (!token) {

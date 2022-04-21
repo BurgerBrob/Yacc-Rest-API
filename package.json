@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "compile": "tsc && node --experimental-json-modules dist/main.js", 
-    "dev" : "nodemon --watch src/ --exec \"npm run compile\" --verbose -e ts"
+    "dev": "nodemon --watch src/ --exec \"npm run compile\" --verbose -e ts"
   },
   "keywords": [],
   "author": "",
