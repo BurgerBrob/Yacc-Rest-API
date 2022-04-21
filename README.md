@@ -6,17 +6,31 @@ Just me trying to figure out how to create a fullstack chat application
       - [POST](#post)
         - [Example request body:](#example-request-body)
         - [Parameters:](#parameters)
+        - [Permission needed:](#permission-needed)
       - [GET](#get)
         - [Example request body:](#example-request-body-1)
         - [Parameters:](#parameters-1)
+        - [Permission needed:](#permission-needed-1)
     - [Messages](#messages)
       - [GET](#get-1)
         - [Example request body:](#example-request-body-2)
         - [Parameters:](#parameters-2)
+        - [Permission needed:](#permission-needed-2)
     - [token](#token)
       - [POST](#post-1)
         - [Example request body:](#example-request-body-3)
         - [Parameters:](#parameters-3)
+        - [Permission needed:](#permission-needed-3)
+    - [Users](#users)
+      - [GET](#get-2)
+        - [Example request body:](#example-request-body-4)
+        - [Parameters:](#parameters-4)
+        - [Permission needed:](#permission-needed-4)
+    - [User](#user)
+      - [GET](#get-3)
+        - [Example request body:](#example-request-body-5)
+        - [Parameters:](#parameters-5)
+        - [Permission needed:](#permission-needed-5)
 
 ## Routes
 ### Message
@@ -35,7 +49,8 @@ Sends message to the chat
 - `apiToken`: The api token
 - `content`: The content of the message
 - `author`: The author of the message
-
+##### Permission needed:
+- `sendMessage`
 #### GET
 Gets a certain message by id
 
@@ -49,7 +64,8 @@ Gets a certain message by id
 ##### Parameters:
 - `apiToken`: The api token
 - `messageId`: The id of the message
-
+##### Permission needed:
+- `getMessage`
 ### Messages
 #### GET
 Gets all messages
@@ -62,7 +78,8 @@ Gets all messages
 ```
 ##### Parameters:
 - `apiToken`: The api token
-
+##### Permission needed:
+- `sendMessages`
 ### token
 #### POST
 Creates a new token
@@ -90,3 +107,33 @@ Creates a new token
 - `getMessage`(optional): if the new token has the right to get message
 - `getMessages`(optional): if the new token has the right to get messages
 - `admin`(optional): gives the token every right 
+##### Permission needed:
+- `addToken`
+### Users
+#### GET 
+Gets all users
+##### Example request body:
+```
+{
+  "apiToken" : "163b20a9cf4a887f3c3cdb23fe85db96"
+}
+```
+##### Parameters:
+- `apiToken`: The api token
+##### Permission needed:
+- `getUsers`
+### User
+#### GET
+Gets a certain user by id
+##### Example request body:
+```
+{
+  "apiToken" : "163b20a9cf4a887f3c3cdb23fe85db96",
+  "userId" : "163b20a9cf4a887f3c3cdb23fe85db97"
+}
+```
+##### Parameters:
+- `apiToken`: The api token
+- `userId`: The id of the user
+##### Permission needed:
+- `getUser`
