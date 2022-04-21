@@ -23,10 +23,12 @@ const dbName = "Yacc";
 let db: Db;
 let users: Collection;
 let tokens: Collection;
+let messages: Collection;
 
 await client.connect();
 db = client.db(dbName);
 users = db.collection("Users");
 tokens = db.collection("Tokens");
+messages = db.collection("Messages");
 
-export { client, db, users, tokens };
+export { client, db, users, tokens, messages };
