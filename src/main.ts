@@ -13,19 +13,21 @@ app.use(userRouter);
 app.use(tokenRouter);
 app.use(messageRouter);
 
-const port = 3003
+const port = 3000
 
 // Connects to the database
-app.listen(port, async () => {
+const server = app.listen(port, async () => {
     console.log(`Example app listening on port ${port}!`)
 })
 
 // Close the connection when the application ends
 process.on("exit", () => {
-    client.close()
+    client.close();
+    server.close();
 });
 
 // Close the connection when the application is interrupted
 process.on("SIGINT", () => {
-    client.close()
+    client.close();
+    server.close();
 });

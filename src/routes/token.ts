@@ -25,14 +25,8 @@ interface Token {
 
 // TODO: make this actually work
 router.post("/token", asynchHandler(async (req, res) => {
-    console.log(req.body);
-
     const token = req.body.apiToken;
-    console.log("te");
-
     if (!token) {
-        console.log("NIGGA");
-
         res.statusMessage = "No apiToken provided";
         res.status(400).end();
         return;
